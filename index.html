@@ -14,8 +14,6 @@
             align-items: center;
             min-height: 50vh;
         }
-       
-       
         .carousel-item img {
             width: 100%;
             height: 500px;
@@ -58,15 +56,23 @@
         // Твой код для обработки жестов и движения мышью
         var xClick;
         var mouseDown;
+        var isMoving = false; // Переменная состояния, чтобы отслеживать, происходит ли переключение
 
         $(".carousel").on("touchstart", function (event) {
             xClick = event.originalEvent.touches[0].pageX;
+            isMoving = false; // Сбрасываем состояние перед началом движения
             $(this).one("touchmove", function (event) {
                 var xMove = event.originalEvent.touches[0].pageX;
                 if (Math.floor(xClick - xMove) > 5) {
-                    $(this).carousel('next');
+                    if (!isMoving) {
+                        $(this).carousel('next');
+                        isMoving = true; // Устанавливаем состояние в true, чтобы избежать повторного срабатывания
+                    }
                 } else if (Math.floor(xClick - xMove) < -5) {
-                    $(this).carousel('prev');
+                    if (!isMoving) {
+                        $(this).carousel('prev');
+                        isMoving = true; // Устанавливаем состояние в true, чтобы избежать повторного срабатывания
+                    }
                 }
             });
             $(".carousel").on("touchend", function () {
@@ -77,15 +83,22 @@
         $(".carousel").on("mousedown", function (event) {
             xClick = event.pageX;
             mouseDown = true;
+            isMoving = false; // Сбрасываем состояние перед началом движения
         });
 
         $(".carousel").on("mousemove", function (event) {
             if (mouseDown) {
                 var xMove = event.pageX;
                 if (Math.floor(xClick - xMove) > 5) {
-                    $(this).carousel('next');
+                    if (!isMoving) {
+                        $(this).carousel('next');
+                        isMoving = true; // Устанавливаем состояние в true, чтобы избежать повторного срабатывания
+                    }
                 } else if (Math.floor(xClick - xMove) < -5) {
-                    $(this).carousel('prev');
+                    if (!isMoving) {
+                        $(this).carousel('prev');
+                        isMoving = true; // Устанавливаем состояние в true, чтобы избежать повторного срабатывания
+                    }
                 }
             }
         });
